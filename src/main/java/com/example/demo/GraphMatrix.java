@@ -1,3 +1,5 @@
+package com.example.demo;
+
 public class GraphMatrix<K> implements IGraph<K> {
     private Vertex<K>[] vertices;
     private int[][] matAd;
@@ -16,6 +18,35 @@ public class GraphMatrix<K> implements IGraph<K> {
         this.isDirectGraph = isDirectGraph;
         this.isMultiple = isMultiple;
         this.hasLoops = hasLoops;
+    }
+
+
+    public Vertex<K>[] getVertices() {
+        return vertices;
+    }
+
+    public int[][] getMatAd() {
+        return matAd;
+    }
+
+    public int getNumVertices() {
+        return numVertices;
+    }
+
+    public int getMaxSize() {
+        return maxSize;
+    }
+
+    public boolean isDirectGraph() {
+        return isDirectGraph;
+    }
+
+    public boolean isMultiple() {
+        return isMultiple;
+    }
+
+    public boolean isHasLoops() {
+        return hasLoops;
     }
 
     private int getIndex(Vertex<K> vertex) {
@@ -202,4 +233,20 @@ public class GraphMatrix<K> implements IGraph<K> {
 
     }
 
+
+    public void setVertices(Vertex<K>[] vertices) {
+        this.vertices = vertices;
+    }
+
+    public void setMatAd(int[][] matAd) {
+        this.matAd = matAd;
+    }
+
+    public void setNumVertices(int numVertices) {
+        this.numVertices = numVertices;
+    }
+
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
+    }
 }

@@ -1,6 +1,6 @@
-import java.awt.Color;
+package com.example.demo;
+
 import java.util.*;
-import java.util.List;
 
 public class Graph<K> implements IGraph<K> {
     private ArrayList<Vertex<K>> vertices;

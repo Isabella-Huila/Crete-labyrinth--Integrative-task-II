@@ -1,3 +1,5 @@
+package com.example.demo;
+
 public class Edge<K> {
     private Vertex<K> origin;
     private Vertex<K> destination;
