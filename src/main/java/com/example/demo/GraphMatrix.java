@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import java.util.*;
+
 public class GraphMatrix<K> implements IGraph<K> {
     private Vertex<K>[] vertices;
     private int[][] matAd;
@@ -64,7 +66,7 @@ public class GraphMatrix<K> implements IGraph<K> {
             throw new NullPointerException("nul vertex");
         }
         for (Vertex<K> vertex : vertices) {
-            if (vertex == null){
+            if (vertex == null) {
                 return null;
             }
             K vertexDato = vertex.getDato();
@@ -172,7 +174,7 @@ public class GraphMatrix<K> implements IGraph<K> {
         }
         // Grafo dirigido
         else if (isDirectGraph && !isMultiple && hasLoops) {
-            if (matAd[originIndex][destinationIndex] == 0 && matAd[destinationIndex][originIndex] == 0){
+            if (matAd[originIndex][destinationIndex] == 0 && matAd[destinationIndex][originIndex] == 0) {
                 matAd[originIndex][destinationIndex] = 1;
             }
         }
@@ -208,27 +210,27 @@ public class GraphMatrix<K> implements IGraph<K> {
     }
 
     public void printAdjacencyMatrix() {
-            int numVertices = vertices.length;
+        int numVertices = vertices.length;
 
-            System.out.print("  ");
-            for (int i = 0; i < numVertices; i++) {
-                if (vertices[i] != null) {
-                    System.out.print(vertices[i].getDato() + " ");
-                }
+        System.out.print("  ");
+        for (int i = 0; i < numVertices; i++) {
+            if (vertices[i] != null) {
+                System.out.print(vertices[i].getDato() + " ");
             }
-            System.out.println();
+        }
+        System.out.println();
 
-            for (int i = 0; i < numVertices; i++) {
-                if (vertices[i] != null) {
-                    System.out.print(vertices[i].getDato() + " ");
-                    for (int j = 0; j < numVertices; j++) {
-                        if (vertices[j] != null) {
-                            System.out.print(matAd[i][j] + " ");
-                        }
+        for (int i = 0; i < numVertices; i++) {
+            if (vertices[i] != null) {
+                System.out.print(vertices[i].getDato() + " ");
+                for (int j = 0; j < numVertices; j++) {
+                    if (vertices[j] != null) {
+                        System.out.print(matAd[i][j] + " ");
                     }
-                    System.out.println();
                 }
+                System.out.println();
             }
+        }
 
 
     }
@@ -249,4 +251,64 @@ public class GraphMatrix<K> implements IGraph<K> {
     public void setMaxSize(int maxSize) {
         this.maxSize = maxSize;
     }
+
+    private static final int[][] DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // Arriba, abajo, izquierda, derecha
+
+
+    public void bfs(int[] start, int[] end, boolean[][] visited, int[][] prev) {
+        int rows = matAd.length;
+        int cols = matAd[0].length;
+
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(start);
+        visited[start[0]][start[1]] = true;
+
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+
+            if (Arrays.equals(current, end)) {
+                return;
+            }
+
+            for (int[] direction : DIRECTIONS) {
+                int newRow = current[0] + direction[0];
+                int newCol = current[1] + direction[1];
+
+                if (isValidMove(matAd, visited, newRow, newCol)) {
+                    queue.offer(new int[]{newRow, newCol});
+                    visited[newRow][newCol] = true;
+                    prev[newRow][newCol] = current[0] * cols + current[1];
+                }
+            }
+        }
+    }
+
+    public void dfs(int row, int col, int[] end, boolean[][] visited, int[][] prev) {
+        visited[row][col] = true;
+
+        if (Arrays.equals(new int[]{row, col}, end)) {
+            return;
+        }
+
+        int rows = matAd.length;
+        int cols = matAd[0].length;
+
+        for (int[] direction : DIRECTIONS) {
+            int newRow = row + direction[0];
+            int newCol = col + direction[1];
+
+            if (isValidMove(matAd, visited, newRow, newCol)) {
+                prev[newRow][newCol] = row * cols + col;
+                dfs(newRow, newCol, end, visited, prev);
+            }
+        }
+    }
+
+    private static boolean isValidMove(int[][] maze, boolean[][] visited, int row, int col) {
+        int rows = maze.length;
+        int cols = maze[0].length;
+
+        return row >= 0 && row < rows && col >= 0 && col < cols && maze[row][col] == 1 && !visited[row][col];
+    }
+
 }

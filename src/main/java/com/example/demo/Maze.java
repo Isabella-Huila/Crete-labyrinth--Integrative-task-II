@@ -1,9 +1,13 @@
 package com.example.demo;
-import java.io.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Maze {
     private GraphMatrix<Integer> graphMatrix;
     static String path= "data.txt";
@@ -44,13 +48,6 @@ public class Maze {
         graphMatrix.setVertices(vertices);
         graphMatrix.setMatAd(matAd);
         graphMatrix.setNumVertices(numVertices);
-        /*
-        GraphMatrix grafo = gson.fromJson(content, GraphMatrix.class);
-        graphMatrix.setVertices(grafo.getVertices());
-        graphMatrix.setMatAd(grafo.getMatAd());
-        graphMatrix.setNumVertices(grafo.getNumVertices());
-        graphMatrix.setMaxSize(grafo.getMaxSize());
-        fis.close();*/
 
     }
 
@@ -60,5 +57,43 @@ public class Maze {
 
     public void setGraphMatrix(GraphMatrix<Integer> graphMatrix) {
         this.graphMatrix = graphMatrix;
+    }
+
+    public List<int[]> solveMaze(int[] start, int[] end, boolean useBFS) {
+        int rows = graphMatrix.getMatAd().length;
+        int cols = graphMatrix.getMatAd()[0].length;
+
+        boolean[][] visited = new boolean[rows][cols];
+        int[][] prev = new int[rows][cols];
+
+        if (useBFS) {
+            graphMatrix.bfs(start, end, visited, prev);
+        } else {
+            graphMatrix.dfs(start[0], start[1], end, visited, prev);
+        }
+
+        return reconstructPath(prev, start, end);
+    }
+
+    private static List<int[]> reconstructPath(int[][] prev, int[] start, int[] end) {
+        List<int[]> path = new ArrayList<>();
+        int rows = prev.length;
+        int cols = prev[0].length;
+
+        int currentRow = end[0];
+        int currentCol = end[1];
+
+        while (!Arrays.equals(new int[]{currentRow, currentCol}, start)) {
+            path.add(0, new int[]{currentRow, currentCol});
+
+            int prevIndex = prev[currentRow][currentCol];
+            currentRow = prevIndex / cols;
+            currentCol = prevIndex % cols;
+        }
+
+        path.add(0, start);
+
+        return path;
+
     }
 }
