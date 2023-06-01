@@ -2,7 +2,7 @@ package com.example.demo;
 
 import java.util.*;
 
-public class GraphMatrix<K> implements IGraph<K> {
+public class   GraphMatrix<K> implements IGraph<K> {
     private Vertex<K>[] vertices;
     private int[][] matAd;
     private int numVertices;
@@ -309,6 +309,68 @@ public class GraphMatrix<K> implements IGraph<K> {
         int cols = maze[0].length;
 
         return row >= 0 && row < rows && col >= 0 && col < cols && maze[row][col] == 1 && !visited[row][col];
+    }
+
+     // algoritmo de Kruskal
+
+    public List<Edge<K>> kruskal() {
+        List<Edge<K>> result = new ArrayList<>();
+        List<Edge<K>> edges = getAllEdges();
+        Collections.sort(edges, (e1, e2) -> Integer.compare(e1.getCost(), e2.getCost()));
+        int[][] vertexSets = new int[numVertices][numVertices];
+
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                vertexSets[i][j] = i == j ? i : -1;
+            }
+        }
+
+
+        for (Edge<K> currentEdge : edges) { // orden ascendente
+            int origin = getIndex(currentEdge.getOrigin());
+            int destination = getIndex(currentEdge.getDestination());
+            if (findSet(vertexSets, origin) != findSet(vertexSets, destination)) {
+                result.add(currentEdge);
+                unionSets(vertexSets, origin, destination);
+            }
+        }
+
+        return result;
+    }
+
+    // Obtener todos los arcos del grafo
+    private List<Edge<K>> getAllEdges() {
+        List<Edge<K>> edges = new ArrayList<>();
+
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                if (matAd[i][j] != 0) {
+                    Vertex<K> origin = vertices[i];
+                    Vertex<K> destination = vertices[j];
+                    int cost = matAd[i][j];
+                    Edge<K> edge = new Edge<>(origin, destination, cost);
+                    edges.add(edge);
+                }
+            }
+        }
+
+        return edges;
+    }
+
+    // Encontrar el conjunto al que pertenece un vértice
+    private int findSet(int[][] vertexSets, int vertex) {
+        int parent = vertex;
+        while (vertexSets[parent][vertex] != parent) {
+            parent = vertexSets[parent][vertex];
+        }
+        return parent;
+    }
+
+    // Unir dos conjuntos
+    private void unionSets(int[][] vertexSets, int vertex1, int vertex2) {
+        int parent1 = findSet(vertexSets, vertex1);
+        int parent2 = findSet(vertexSets, vertex2);
+        vertexSets[parent2][vertex2] = parent1;
     }
 
 }

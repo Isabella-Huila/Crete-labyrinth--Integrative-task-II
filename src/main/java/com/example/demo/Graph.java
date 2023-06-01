@@ -218,4 +218,93 @@ public class Graph<K> implements IGraph<K> {
         time++;
         vertex.setFinishTime(time);
     }
+
+    // Implementación del algoritmo de Kruskal
+
+    /**
+     *El algoritmo de Kruskal encuentra el árbol de expansión mínima de un grafo uniendo los conjuntos
+     * de vértices mediante aristas de menor costo, evitando la formación de ciclos.
+     * @return Una lista de aristas que conforman el árbol de expansión mínima del grafo.
+     */
+
+    public ArrayList<Edge<K>> kruskal() {
+        ArrayList<Edge<K>> minimumSpanningTree = new ArrayList<>();
+        Collections.sort(edges, Comparator.comparingInt(Edge::getCost)); // ordena arristas de forma creciente
+        Set<Vertex<K>> visitedVertices = new HashSet<>(); // existencia de ciclo?
+        for (Edge<K> edge : edges) {
+            Vertex<K> origin = edge.getOrigin();
+            Vertex<K> destination = edge.getDestination();
+
+            if (!hasCycle(minimumSpanningTree, origin, destination)) {
+                minimumSpanningTree.add(edge);
+
+                // Marca los vértices como visitados
+                visitedVertices.add(origin);
+                visitedVertices.add(destination);
+            }
+        }
+        return minimumSpanningTree;
+    }
+
+
+    /**
+     * Verifica si agregar una arista al árbol de expansión mínima crea un ciclo.
+     * Se realiza una búsqueda en profundidad desde el vértice de origen y desde el vértice de destino
+     * para detectar si hay un camino entre ellos en el árbol de expansión mínima actual.
+     *
+     * @param minimumSpanningTree El árbol de expansión mínima actual.
+     * @param origin El vértice de origen de la arista.
+     * @param destination El vértice de destino de la arista.
+     * @return true si agregar la arista crea un ciclo, false de lo contrario.
+     */
+
+
+    private boolean hasCycle(ArrayList<Edge<K>> minimumSpanningTree, Vertex<K> origin, Vertex<K> destination) {
+        Set<Vertex<K>> visited = new HashSet<>();
+        if (hasCycleDFS(origin, destination, visited, null)) {
+            return true;
+        }
+        visited.clear();
+        if (hasCycleDFS(destination, origin, visited, null)) {
+            return true;
+        }
+
+        return false;
+    }
+
+/**
+ * Realiza una búsqueda en profundidad para verificar la existencia de un camino entre el vértice actual y el vértice de destino.
+ * Se ignora el vértice padre en el recorrido para evitar ciclos.
+ * @param current El vértice actual.
+ * @param destination El vértice de destino.
+ * @param visited El conjunto de vértices visitados.
+ * @param parent El vértice padre en el recorrido.
+ * @return true si se encuentra un camino entre el vértice actual y el vértrtice de destino, false de lo contrario.
+ *
+ * **/
+    private boolean hasCycleDFS(Vertex<K> current, Vertex<K> destination, Set<Vertex<K>> visited, Vertex<K> parent) {
+        visited.add(current);
+        for (Edge<K> edge : current.getEdges()) {  // recorre vertices Adyacentes
+            Vertex<K> neighbor = edge.getDestination();
+
+            if (neighbor == parent) {
+                continue;  // aquí no tiene en cuenta al padre
+            }
+            if (neighbor == destination) {
+                return true;
+            }
+            if (visited.contains(neighbor)) { // verifica vertiice adyacente visitado
+                continue;
+            }
+
+            if (hasCycleDFS(neighbor, destination, visited, current)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
 }
