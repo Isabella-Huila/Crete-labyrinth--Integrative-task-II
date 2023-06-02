@@ -22,7 +22,24 @@ public class MazeTest {
         graphMatrix1.setMatAd(graphMatrix);
         maze.setGraphMatrix(graphMatrix1);
     }
-    
+
+    public void setupStange2(){
+        maze= new Maze();
+
+
+        int[][] graphMatrix = {
+                {1, 0, 1},
+                {1, 0, 1},
+                {1, 0, 1}
+        };
+
+
+        GraphMatrix<Integer> graphMatrix1= new GraphMatrix<>(3, false, false, false);
+        graphMatrix1.setMatAd(graphMatrix);
+        maze.setGraphMatrix(graphMatrix1);
+    }
+
+
     @Test
     void testSolveMazeWithBFS() {
         setupStage1();
@@ -67,5 +84,25 @@ public class MazeTest {
             assertArrayEquals(expectedPath.get(i), actualPath.get(i));
         }
     }
+
+    @Test
+    public void testSolveMazeWithUnreachableEnd(){
+        setupStange2();
+        int[] start={0,0};
+        int[] end= {2, 2};
+
+
+        boolean useBFS= true;
+
+
+        List<int[]> expectedPath = Arrays.asList(); // No path is expected
+
+
+        List<int[]> actualPath = maze.solveMaze(start, end, useBFS);
+
+
+        assertEquals(expectedPath, actualPath);
+    }
+
 
 }

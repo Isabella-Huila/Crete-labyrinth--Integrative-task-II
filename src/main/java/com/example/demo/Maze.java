@@ -72,7 +72,12 @@ public class Maze {
             graphMatrix.dfs(start[0], start[1], end, visited, prev);
         }
 
+        if (!visited[end[0]][end[1]]) {
+            // No hay camino para alcanzar la salida, retorna una lista vacía
+            return new ArrayList<>();
+        }
         return reconstructPath(prev, start, end);
+
     }
 
     private static List<int[]> reconstructPath(int[][] prev, int[] start, int[] end) {
