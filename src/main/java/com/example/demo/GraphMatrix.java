@@ -61,7 +61,7 @@ public class   GraphMatrix<K> implements IGraph<K> {
     }
 
 
-    Vertex<K> searchVertexM(K dato) {
+    public Vertex<K> searchVertexM(K dato) {
         if (dato == null) {
             throw new NullPointerException("nul vertex");
         }
@@ -267,7 +267,7 @@ public class   GraphMatrix<K> implements IGraph<K> {
             int[] current = queue.poll();
 
             if (Arrays.equals(current, end)) {
-                return;
+
             }
 
             for (int[] direction : DIRECTIONS) {
@@ -312,8 +312,50 @@ public class   GraphMatrix<K> implements IGraph<K> {
     }
 
 
+    public boolean[][] runWarshallAlgorithm() {
+        int[][] adjacencyMatrix = getAdjacencyMatrix();
+        int size = adjacencyMatrix.length;
+        boolean[][] result = new boolean[size][size];
 
-     // algoritmo de Kruskal
+        // Copiar los elementos de adjacencyMatrix a result
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                result[i][j] = adjacencyMatrix[i][j] != 0;
+            }
+        }
+
+        // Algoritmo de Warshall
+        for (int k = 0; k < size; k++) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    result[i][j] = result[i][j] || (result[i][k] && result[k][j]);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private int[][] getAdjacencyMatrix() {
+        int numVertices = vertices.length;
+        int[][] adjacencyMatrix = new int[numVertices][numVertices];
+
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                if (vertices[i] != null && vertices[j] != null) {
+                    adjacencyMatrix[i][j] = matAd[i][j];
+                }
+            }
+        }
+
+        return adjacencyMatrix;
+    }
+
+
+
+
+
+    // algoritmo de Kruskal
 
     public List<Edge<K>> kruskal() {
         List<Edge<K>> result = new ArrayList<>();
