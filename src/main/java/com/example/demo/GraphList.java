@@ -2,7 +2,7 @@ package com.example.demo;
 
 import java.util.*;
 
-public class Graph<K> implements IGraph<K> {
+public class GraphList<K> implements IGraph<K> {
     private ArrayList<Vertex<K>> vertices;
     private ArrayList<Edge<K>> edges;
     private int time;
@@ -19,7 +19,7 @@ public class Graph<K> implements IGraph<K> {
         return edges;
     }
 
-    public Graph(boolean isDirectGraph, boolean isMultiple, boolean hasLoops) {
+    public GraphList(boolean isDirectGraph, boolean isMultiple, boolean hasLoops) {
         this.vertices = new ArrayList<>();
         this.edges = new ArrayList<>();
         this.isDirectGraph = isDirectGraph;
@@ -265,16 +265,16 @@ public class Graph<K> implements IGraph<K> {
     }
 
 
-        public int prim(int n, List<List<Integer>> edges, int start) {
+        public int prim(int n, List<List<K>> edges, int start) {
             Map<Integer, Vertex<Integer>> map = new HashMap<>();
             for (int i = 1; i <= n; i++) {
                 map.put(i, new Vertex<>(i));
             }
 
-            for (List<Integer> edge : edges) {
-                int source = edge.get(0);
-                int destination = edge.get(1);
-                int weight = edge.get(2);
+            for (List<K> edge : edges) {
+                int source = (int) edge.get(0);
+                int destination = (int) edge.get(1);
+                int weight = (int) edge.get(2);
 
                 Vertex<Integer> sourceVertex = map.get(source);
                 Vertex<Integer> destinationVertex = map.get(destination);

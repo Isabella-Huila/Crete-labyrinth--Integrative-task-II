@@ -1,6 +1,6 @@
 
 import com.example.demo.Edge;
-import com.example.demo.Graph;
+import com.example.demo.GraphList;
 import com.example.demo.Vertex;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,21 +12,21 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class GraphTest {
+public class GraphListTest {
 
-    private Graph<Integer> graphList;
+    private GraphList<Integer> graphList;
 
     public void setupStage1() {
-        graphList = new Graph<>(false, false, false);
+        graphList = new GraphList<>(false, false, false);
         graphList.addVertex(new Vertex<>(1));
         graphList.addVertex(new Vertex<>(2));
         graphList.addVertex(new Vertex<>(3));
-        graphList.addEdge(1, 2, 0);
-        graphList.addEdge(2, 3, 0);
+        graphList.addEdge(1, 2, 6);
+        graphList.addEdge(2, 3, 4);
     }
 
     public void setupStage2() {
-        graphList = new Graph<>(true, false, false);
+        graphList = new GraphList<>(true, false, false);
         graphList.addVertex(new Vertex<>(1));
         graphList.addVertex(new Vertex<>(2));
         graphList.addVertex(new Vertex<>(3));
@@ -35,13 +35,13 @@ public class GraphTest {
     }
 
     private void setupStage3() {
-        graphList = new Graph<>(false, false, false);
+        graphList = new GraphList<>(false, false, false);
         graphList.addVertex(new Vertex<>(1));
         graphList.addVertex(new Vertex<>(2));
     }
 
     private void setupStage4() {
-        graphList = new Graph<>(false, false, false);
+        graphList = new GraphList<>(false, false, false);
         Vertex<Integer> vertex1 = new Vertex<>(1);
         Vertex<Integer> vertex2 = new Vertex<>(2);
         Vertex<Integer> vertex3 = new Vertex<>(3);
@@ -64,6 +64,8 @@ public class GraphTest {
         graphList.addVertex(vertex3);
         graphList.addVertex(vertex4);
     }
+
+
 
     @Test
     public void addVertexTest() {
@@ -290,8 +292,8 @@ public class GraphTest {
   }
 
     @Test
-    public void testPrims() {
-        graphList = new Graph<>(false, false, false);
+    public void testPrims1() {
+        setupStage4();
         int n = 4;
         List<List<Integer>> edges = new ArrayList<>();
         edges.add(Arrays.asList(1, 2, 1));
@@ -303,6 +305,30 @@ public class GraphTest {
 
         int mstWeight = graphList.prim(n, edges, start);
         Assertions.assertEquals(6, mstWeight);
+    }
+
+
+    @Test
+    public void testPrims2() {
+        setupStage1();
+        List<List<Integer>> edges = new ArrayList<>();
+        edges.add(Arrays.asList(1, 2, 1));
+        edges.add(Arrays.asList(2, 3, 2));
+        int start = 1;
+
+        int mstWeight = graphList.prim(graphList.getVertices().size(), edges, start);
+        Assertions.assertEquals(3, mstWeight);
+    }
+
+    @Test
+    public void testPrims3() {
+        setupStage3();
+        List<List<Integer>> edges = new ArrayList<>();
+        edges.add(Arrays.asList(1, 2, 1));
+        int start = 1;
+
+        int mstWeight = graphList.prim(graphList.getVertices().size(), edges, start);
+        Assertions.assertEquals(1, mstWeight);
     }
 
 
