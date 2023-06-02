@@ -219,6 +219,61 @@ public class Graph<K> implements IGraph<K> {
         vertex.setFinishTime(time);
     }
 
+
+        public int prim(int n, List<List<Integer>> edges, int start) {
+            Map<Integer, Vertex<Integer>> map = new HashMap<>();
+            for (int i = 1; i <= n; i++) {
+                map.put(i, new Vertex<>(i));
+            }
+
+            for (List<Integer> edge : edges) {
+                int source = edge.get(0);
+                int destination = edge.get(1);
+                int weight = edge.get(2);
+
+                Vertex<Integer> sourceVertex = map.get(source);
+                Vertex<Integer> destinationVertex = map.get(destination);
+
+                Edge<Integer> edge1 = new Edge<>(sourceVertex, destinationVertex, weight);
+                Edge<Integer> edge2 = new Edge<>(destinationVertex, sourceVertex, weight);
+
+                sourceVertex.addEdge(edge1);
+                destinationVertex.addEdge(edge2);
+            }
+
+            Set<Integer> visited = new HashSet<>();
+            PriorityQueue<Edge<Integer>> pq = new PriorityQueue<>(Comparator.comparingInt(e -> e.getCost()));
+            visited.add(start);
+
+            Vertex<Integer> startVertex = map.get(start);
+            for (Edge<Integer> edge : startVertex.getEdges()) {
+                Vertex<Integer> neighbor = edge.getVecino(startVertex);
+                int weight = edge.getCost();
+                pq.add(new Edge<>(startVertex, neighbor, weight));
+            }
+
+            int mstWeight = 0;
+
+            while (!visited.containsAll(map.keySet())) {
+                Edge<Integer> edge = pq.poll();
+
+                if (!visited.contains(edge.getDestination().getDato())) {
+                    mstWeight += edge.getCost();
+                    visited.add(edge.getDestination().getDato());
+
+                    Vertex<Integer> destinationVertex = map.get(edge.getDestination().getDato());
+                    for (Edge<Integer> neighborEdge : destinationVertex.getEdges()) {
+                        Vertex<Integer> neighbor = neighborEdge.getVecino(destinationVertex);
+                        int weight = neighborEdge.getCost();
+                        pq.add(new Edge<>(destinationVertex, neighbor, weight));
+                    }
+                }
+            }
+
+            return mstWeight;
+        }
+
+
     // Implementación del algoritmo de Kruskal
 
     /**
@@ -304,6 +359,8 @@ public class Graph<K> implements IGraph<K> {
 
         return false;
     }
+
+
 
 
 

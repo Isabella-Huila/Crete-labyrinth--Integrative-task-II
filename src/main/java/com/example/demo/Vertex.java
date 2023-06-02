@@ -22,6 +22,7 @@ public class Vertex<K> {
         finishTime=0;
     }
 
+
     public int getFinishTime() {
         return finishTime;
     }
@@ -81,6 +82,8 @@ public class Vertex<K> {
     public void addEdge(Edge<K> edge){
         edges.add(edge);
     }
+
+
 
     public void removeEdge() {
         for (Edge<K> edge : edges) {

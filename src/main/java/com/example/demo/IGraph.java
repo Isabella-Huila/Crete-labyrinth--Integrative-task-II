@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import java.util.List;
+
 public interface IGraph<V> {
 
     public void addVertex(Vertex<V> vertex);
