@@ -239,8 +239,50 @@ public class GraphMatrixTest {
         assertNull(result);
     }
 
+    @Test
+    public void testKruskal_EmptyGraph() {
+        setupStage1();
+        GraphMatrix<String> graph = new GraphMatrix<>();
+        List<Edge<String>> result = graph.kruskal();
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testKruskal() {
+        GraphMatrix<String> graph = new GraphMatrix<>();
+        List<Edge<String>> result = graph.kruskal();
+        assertTrue(result.isEmpty());
+    }
 
 
 
+    @Test
+    public void testDijkstra_EmptyGraph() {
+
+        GraphMatrix<String> graph = new GraphMatrix<>();
+        Vertex<String> vertexA = new Vertex<>("A");
+
+        List<Vertex<String>> result = graph.dijkstra(vertexA);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testKruskal_AllVerticesDisconnected() {
+
+        GraphMatrix graphMatrix = new GraphMatrix();
+
+        List<Edge<Integer>> mst = graphMatrix.kruskal();
+
+        assertTrue(mst.isEmpty());
+    }
+
+
+    @Test
+    public void testDijkstra() {
+        GraphMatrix<String> graph = new GraphMatrix<>();
+        Vertex<String> vertexA = new Vertex<>("A");
+        List<Vertex<String>> result = graph.dijkstra(vertexA);
+        assertTrue(result.isEmpty());
+    }
 
 }

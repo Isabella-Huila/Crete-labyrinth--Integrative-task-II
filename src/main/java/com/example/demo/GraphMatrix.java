@@ -22,6 +22,10 @@ public class   GraphMatrix<K> implements IGraph<K> {
         this.hasLoops = hasLoops;
     }
 
+    public GraphMatrix() {
+
+    }
+
 
     public Vertex<K>[] getVertices() {
         return vertices;
@@ -415,6 +419,62 @@ public class   GraphMatrix<K> implements IGraph<K> {
         int parent1 = findSet(vertexSets, vertex1);
         int parent2 = findSet(vertexSets, vertex2);
         vertexSets[parent2][vertex2] = parent1;
+    }
+
+    // Disjtraj
+    public List<Vertex<K>> dijkstra(Vertex<K> source) {
+        int sourceIndex = getIndex(source);
+
+        // Crear arreglos de distancias y nodos visitados
+        int[] distances = new int[numVertices];
+        boolean[] visited = new boolean[numVertices];
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        Arrays.fill(visited, false);
+
+        // Recorrido del grafo
+        for (int i = 0; i < numVertices - 1; i++) {
+            // Encontrar el nodo con la distancia mínima aún no visitado
+            int minDistanceIndex = findMinDistance(distances, visited);
+            visited[minDistanceIndex] = true;
+
+            // Actualizar las distancias de los nodos adyacentes
+            for (int j = 0; j < numVertices; j++) {
+                if (!visited[j] && matAd[minDistanceIndex][j] != 0) {
+                    int newDistance = distances[minDistanceIndex] + matAd[minDistanceIndex][j];
+                    if (newDistance < distances[j]) {
+                        distances[j] = newDistance;
+                    }
+                }
+            }
+        }
+
+        // Construir la lista de nodos alcanzables desde el nodo fuente
+        List<Vertex<K>> reachableVertices = new ArrayList<>();
+        for (int i = 0; i < numVertices; i++) {
+            if (distances[i] != Integer.MAX_VALUE) {
+                reachableVertices.add(vertices[i]);
+            }
+        }
+
+        return reachableVertices;
+    }
+    // Encontrar el índice del nodo con la distancia mínima
+    private int findMinDistance(int[] distances, boolean[] visited) {
+        int minDistance = Integer.MAX_VALUE;
+        int minDistanceIndex = -1;
+
+        for (int i = 0; i < numVertices; i++) {
+            if (!visited[i] && distances[i] < minDistance) {
+                minDistance = distances[i];
+                minDistanceIndex = i;
+            }
+        }
+
+        if (minDistanceIndex == -1) {
+            throw new IllegalStateException("No se encontró un nodo con distancia mínima");
+        }
+
+        return minDistanceIndex;
     }
 
 }
