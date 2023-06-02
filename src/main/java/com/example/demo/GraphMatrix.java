@@ -477,4 +477,51 @@ public class   GraphMatrix<K> implements IGraph<K> {
         return minDistanceIndex;
     }
 
+    public int prim(int start) {
+        boolean[] visited = new boolean[numVertices];
+        int[] key = new int[numVertices];
+        int[] parent = new int[numVertices];
+
+        // Inicializar los arrays
+        for (int i = 0; i < numVertices; i++) {
+            key[i] = Integer.MAX_VALUE;
+            visited[i] = false;
+        }
+
+        key[start] = 0;
+        parent[start] = -1;
+
+        for (int count = 0; count < numVertices - 1; count++) {
+            int minKey = Integer.MAX_VALUE;
+            int minIndex = -1;
+
+            // Encontrar el vértice con la clave mínima que no ha sido visitado
+            for (int v = 0; v < numVertices; v++) {
+                if (!visited[v] && key[v] < minKey) {
+                    minKey = key[v];
+                    minIndex = v;
+                }
+            }
+
+            visited[minIndex] = true; // Marcar el vértice como visitado
+
+            // Actualizar las claves y los padres de los vértices adyacentes no visitados
+            for (int v = 0; v < numVertices; v++) {
+                if (matAd[minIndex][v] != 0 && !visited[v] && matAd[minIndex][v] < key[v]) {
+                    parent[v] = minIndex;
+                    key[v] = matAd[minIndex][v];
+                }
+            }
+        }
+
+        int mstWeight = 0;
+
+        // Calcular el peso total del MST sumando las claves de los vértices
+        for (int i = 0; i < numVertices; i++) {
+            mstWeight += key[i];
+        }
+
+        return mstWeight;
+    }
+
 }
