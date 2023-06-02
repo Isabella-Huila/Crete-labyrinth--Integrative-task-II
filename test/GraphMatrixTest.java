@@ -122,37 +122,6 @@ public class GraphMatrixTest {
         assertTrue(graphMatrix.removeVertex(1));
     }
 
-    /*
-    @Test
-    public void AddEdgeTest() {
-        setupStage1();
-        ArrayList<Edge<Integer>> edges = graphMatrix.getEdges();
-        assertEquals(2, edges.size());
-        assertEquals(2 , graphMatrix.getVertices()[1].getEdges().size());
-        assertNotNull(graphMatrix.getVertices()[1].getEdges().get(0));
-        assertEquals(1 , graphMatrix.getVertices()[2].getEdges().size());
-    }
-
-    @Test
-    public void testDeleteEdgeTest() {
-        setupStage1();
-        assertTrue(graphMatrix.removeEdge(2, 3));
-        ArrayList<Edge<Integer>> edges = graphMatrix.getEdges();
-        assertEquals(1, edges.size());
-        assertEquals(Integer.valueOf(1), edges.get(0).getOrigin().getDato());
-        assertEquals(Integer.valueOf(2), edges.get(0).getDestination().getDato());
-    }
-
-
-
-    @Test
-    public void verifyThatEdgesAreDeletedTest(){
-        setupStage1();
-        assertTrue(graphMatrix.removeEdge(1, 2));
-        assertEquals(1 , graphMatrix.getEdges().size());
-    }
-
-     */
 
     @Test
     public void searchVertexExistingTest() {
@@ -194,17 +163,17 @@ public class GraphMatrixTest {
     @Test
     public void BFSGDisconnectedTest() {
         setupStage2();
+        int[] start = {0, 0};
+        int[] end = {2, 2};
+        boolean[][] visited = new boolean[2][2];
+        int[][] prev = new int[1][2];
+
+        graphMatrix.bfs(start, end, visited, prev);
+
         graphMatrix.addVertex(new Vertex<>(6));
-        //assertFalse(graphMatrix.bfs(3, ));
+        assertFalse(visited[1][1]);
     }
     int[][] result=null;
-    @Test
-    public void BFS1Test() {
-        setupStage2();
-        //assertFalse(graphMatrix.bfs(0,));
-        //assertFalse(graphMatrix.bfs(2,));
-    }
-
 
     @Test
     public void testWarshallAlgorithm() {
@@ -226,7 +195,6 @@ public class GraphMatrixTest {
     @Test
     public void testWarshallAlgorithm1() {
         setupStage5();
-        // Ejecutar el algoritmo de Warshall en el grafo
 
         // Verificar que el resultado sea el esperado
         boolean[][] expected = {
