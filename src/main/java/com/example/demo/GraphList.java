@@ -153,7 +153,7 @@ public class GraphList<K> implements IGraph<K> {
         return delete;
     }
 
-    public void BFS(int startVIndex) {
+    public boolean BFS(int startVIndex) {
         if (startVIndex < 0 || startVIndex >= vertices.size()) {
             throw new IllegalArgumentException("Invalid start vertex index");
         }
@@ -192,21 +192,31 @@ public class GraphList<K> implements IGraph<K> {
             // Marcar el vértice actual como visitado completamente (negro)
             currentVertex.setColor(Color.BLACK);
         }
+        for (Vertex<K> v : vertices) {
+            if (v.getColor() == Color.WHITE) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public void DFS() {
+    public int DFS() {
 
         // Marcar todos los vértices como no visitados (blanco)
         for (Vertex<K> vertex : vertices) {
             vertex.setColor(Color.WHITE);
             vertex.setPre(null);
         }
-        time = 0;
+        int trees = 0;
+        int time = 0;
         for (Vertex<K> vertex : vertices) {
             if (vertex.getColor() == Color.WHITE) {
+                trees++;
                 DFSVisit(vertex);
+
             }
         }
+        return trees;
     }
 
     private void DFSVisit(Vertex<K> vertex) {

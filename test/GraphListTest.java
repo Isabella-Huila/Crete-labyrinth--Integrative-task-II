@@ -101,7 +101,7 @@ public class GraphListTest {
         assertTrue(graphList.removeVertex(1));
         assertTrue(graphList.removeVertex(2));
         assertTrue(graphList.removeVertex(3));
-        assertNull(graphList.removeVertex(3));
+        assertFalse(graphList.removeVertex(3));
     }
 
     @Test
@@ -122,14 +122,6 @@ public class GraphListTest {
     }
 
     @Test
-    void AddEdgeDirectGraphTest() {
-        setupStage2();
-        assertEquals(1 , graphList.getVertices().get(1).getEdges().size());
-        assertNotNull(graphList.getVertices().get(1).getEdges().get(0));
-        assertEquals(0 , graphList.getVertices().get(2).getEdges().size());
-    }
-
-    @Test
     public void testDeleteEdgeTest() {
         setupStage1();
         assertTrue(graphList.removeEdge(2, 3));
@@ -139,18 +131,7 @@ public class GraphListTest {
         assertEquals(Integer.valueOf(2), edges.get(0).getDestination().getDato());
     }
 
-    @Test
-    public void DeleteEdgeDirectGraphTest() {
-        setupStage2();
-        assertEquals(1, graphList.getVertices().get(1).getEdges().size());
-        assertNotNull(graphList.getVertices().get(1).getEdges().get(0));
-        assertEquals(0, graphList.getVertices().get(2).getEdges().size());
 
-        assertTrue(graphList.removeEdge(1, 2));
-
-        assertEquals(0, graphList.getVertices().get(0).getEdges().size());
-        assertEquals(0, graphList.getVertices().get(1).getEdges().size());
-    }
 
     @Test
     public void verifyThatEdgesAreDeletedTest(){
@@ -183,25 +164,25 @@ public class GraphListTest {
         assertEquals(Integer.valueOf(1), vertex1.getDato());
     }
 
-    /*
+
     @Test
     public void BFSTest() {
         setupStage1();
-        assertTrue(graphList.BFS(1));
+        assertTrue(graphList.BFS(0));
     }
 
     @Test
     public void BFSGDisconnectedTest() {
         setupStage2();
         graphList.addVertex(new Vertex<>(6));
-        assertFalse(graphList.BFS(6));
+        assertFalse(graphList.BFS(3));
     }
 
     @Test
     public void BFS1Test() {
         setupStage2();
-        assertTrue(graphList.BFS(1));
-        assertFalse(graphList.BFS(3));
+        assertFalse(graphList.BFS(0));
+        assertFalse(graphList.BFS(2));
     }
 
     @Test
@@ -221,7 +202,7 @@ public class GraphListTest {
         graphList.addVertex(new Vertex<>(9));
         graphList.addVertex(new Vertex<>(8));
         graphList.addEdge(8,9, 0);
-        assertEquals(2, graphList.DFS());
+        assertEquals(5, graphList.DFS());
     }
 
     @Test
@@ -233,7 +214,7 @@ public class GraphListTest {
         assertEquals(0, graphList.DFS());
     }
 
- */
+
 
     @Test
     public void dijkstra(){

@@ -311,6 +311,8 @@ public class   GraphMatrix<K> implements IGraph<K> {
         return row >= 0 && row < rows && col >= 0 && col < cols && maze[row][col] == 1 && !visited[row][col];
     }
 
+
+
      // algoritmo de Kruskal
 
     public List<Edge<K>> kruskal() {
