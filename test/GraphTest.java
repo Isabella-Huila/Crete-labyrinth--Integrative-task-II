@@ -40,6 +40,31 @@ public class GraphTest {
         graphList.addVertex(new Vertex<>(2));
     }
 
+    private void setupStage4() {
+        graphList = new Graph<>(false, false, false);
+        Vertex<Integer> vertex1 = new Vertex<>(1);
+        Vertex<Integer> vertex2 = new Vertex<>(2);
+        Vertex<Integer> vertex3 = new Vertex<>(3);
+        Vertex<Integer> vertex4 = new Vertex<>(4);
+
+        Edge<Integer> edge12 = new Edge<>(vertex1, vertex2, 2);
+        Edge<Integer> edge13 = new Edge<>(vertex1, vertex3, 4);
+        Edge<Integer> edge23 = new Edge<>(vertex2, vertex3, 1);
+        Edge<Integer> edge24 = new Edge<>(vertex2, vertex4, 7);
+        Edge<Integer> edge34 = new Edge<>(vertex3, vertex4, 3);
+
+        vertex1.addEdge(edge12);
+        vertex1.addEdge(edge13);
+        vertex2.addEdge(edge23);
+        vertex2.addEdge(edge24);
+        vertex3.addEdge(edge34);
+
+        graphList.addVertex(vertex1);
+        graphList.addVertex(vertex2);
+        graphList.addVertex(vertex3);
+        graphList.addVertex(vertex4);
+    }
+
     @Test
     public void addVertexTest() {
         setupStage1();
@@ -207,6 +232,45 @@ public class GraphTest {
     }
 
  */
+
+    @Test
+    public void dijkstra(){
+        setupStage4();
+        Vertex<Integer> startVertex =graphList.searchVertex(1);
+
+        Vertex<Integer> endVertex = graphList.searchVertex(4);
+
+        // Calcular la ruta más corta desde el vértice de inicio al vértice de destino
+        int result = graphList.dijkstra(startVertex, endVertex);
+
+        assertEquals(6, result);
+    }
+
+    @Test
+    public void dijkstraSameDestination(){
+        setupStage4();
+        Vertex<Integer> startVertex =graphList.searchVertex(1);
+
+        Vertex<Integer> endVertex = graphList.searchVertex(1);
+
+        // Calcular la ruta más corta desde el vértice de inicio al vértice de destino
+        int result = graphList.dijkstra(startVertex, endVertex);
+
+        assertEquals(0, result);
+    }
+
+    @Test
+    public void dijkstraInvalidPath(){
+        setupStage4();
+        Vertex<Integer> startVertex =graphList.searchVertex(1);
+
+        Vertex<Integer> endVertex = graphList.searchVertex(6);
+
+        // Calcular la ruta más corta desde el vértice de inicio al vértice de destino
+        int result = graphList.dijkstra(startVertex, endVertex);
+
+        assertEquals(-1, result);
+    }
 
 
     @Test

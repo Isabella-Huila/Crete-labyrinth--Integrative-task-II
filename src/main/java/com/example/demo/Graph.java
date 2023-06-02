@@ -219,6 +219,51 @@ public class Graph<K> implements IGraph<K> {
         vertex.setFinishTime(time);
     }
 
+    public int dijkstra(Vertex<K> origin, Vertex<K> destination) {
+        // Inicializar la distancia de todos los vértices como infinito, excepto el origen
+        Map<Vertex<K>, Integer> distanceMap = new HashMap<>();
+        for (Vertex<K> vertex : getVertices()) {
+            distanceMap.put(vertex, Integer.MAX_VALUE);
+        }
+        distanceMap.put(origin, 0);
+
+        // Crear una cola de prioridad para almacenar los vértices y sus distancias
+        PriorityQueue<Vertex<K>> queue = new PriorityQueue<>(Comparator.comparingInt(distanceMap::get));
+        queue.add(origin);
+
+        while (!queue.isEmpty()) {
+            Vertex<K> currentVertex = queue.poll();
+
+            // Si se alcanza el destino, se puede interrumpir el algoritmo y retornar el costo del camino
+            if (currentVertex == destination) {
+                return distanceMap.get(currentVertex);
+            }
+
+            // Obtener las aristas adyacentes al vértice actual
+            List<Edge<K>> edges = currentVertex.getEdges();
+
+            for (Edge<K> edge : edges) {
+                Vertex<K> neighbor = edge.getNeighbor(currentVertex);
+                int cost = edge.getCost();
+
+                // Calcular la distancia tentativa desde el origen al vecino a través del vértice actual
+                int tentativeDistance = distanceMap.get(currentVertex) + cost;
+
+                if (tentativeDistance < distanceMap.get(neighbor)) {
+                    // Actualizar la distancia del vecino si la distancia tentativa es menor
+                    distanceMap.put(neighbor, tentativeDistance);
+                    neighbor.setPre(currentVertex);
+
+                    // Agregar el vecino a la cola de prioridad para procesarlo posteriormente
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        // Si no se pudo encontrar un camino al destino, se retorna un valor sentinela
+        return -1;
+    }
+
 
         public int prim(int n, List<List<Integer>> edges, int start) {
             Map<Integer, Vertex<Integer>> map = new HashMap<>();
@@ -247,7 +292,7 @@ public class Graph<K> implements IGraph<K> {
 
             Vertex<Integer> startVertex = map.get(start);
             for (Edge<Integer> edge : startVertex.getEdges()) {
-                Vertex<Integer> neighbor = edge.getVecino(startVertex);
+                Vertex<Integer> neighbor = edge.getNeighbor(startVertex);
                 int weight = edge.getCost();
                 pq.add(new Edge<>(startVertex, neighbor, weight));
             }
@@ -263,7 +308,7 @@ public class Graph<K> implements IGraph<K> {
 
                     Vertex<Integer> destinationVertex = map.get(edge.getDestination().getDato());
                     for (Edge<Integer> neighborEdge : destinationVertex.getEdges()) {
-                        Vertex<Integer> neighbor = neighborEdge.getVecino(destinationVertex);
+                        Vertex<Integer> neighbor = neighborEdge.getNeighbor(destinationVertex);
                         int weight = neighborEdge.getCost();
                         pq.add(new Edge<>(destinationVertex, neighbor, weight));
                     }

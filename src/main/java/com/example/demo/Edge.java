@@ -36,7 +36,7 @@ public class Edge<K> {
         this.destination = destination;
     }
 
-    public Vertex<K> getVecino(Vertex<K> vertex){
+    public Vertex<K> getNeighbor(Vertex<K> vertex){
         if (vertex == origin) {
             return destination;
         } else if (vertex == destination) {
