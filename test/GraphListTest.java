@@ -277,19 +277,68 @@ public class GraphListTest {
 
     @Test
     public void testKruskal1() {
+        setupStage4();
+        GraphList<Integer> graph = new GraphList<>();
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
 
+        graph.addEdge(1, 2, 1);
+        graph.addEdge(1, 3, 3);
+        graph.addEdge(2, 3, 4);
+        graph.addEdge(2, 4, 2);
+        graph.addEdge(3, 4, 5);
 
-    }
+        ArrayList<Edge<Integer>> edges = new ArrayList<>();
+        edges.add(new Edge<>(1, 2, 1));
+        edges.add(new Edge<>(1, 3, 3));
+        edges.add(new Edge<>(2, 3, 4));
+        edges.add(new Edge<>(2, 4, 2));
+        edges.add(new Edge<>(3, 4, 5));
+
+        ArrayList<Edge<Integer>> minimumSpanningTree = graph.kruskal(edges);
+
+        List<Edge<Integer>> expectedMST = Arrays.asList(
+                new Edge<>(1, 2, 1),
+                new Edge<>(2, 4, 2),
+                new Edge<>(1, 3, 3)
+        );
+
+        }
 
     @Test
     public void testKruskal2() {
+        setupStage1();
+        GraphList<Integer> graph = new GraphList<>();
 
+        ArrayList<Edge<Integer>> edges = new ArrayList<>();
+
+        ArrayList<Edge<Integer>> minimumSpanningTree = graph.kruskal(edges);
+
+        assertTrue(minimumSpanningTree.isEmpty());
     }
 
   @Test
   public void testKruskal3() {
+        setupStage2();
+      GraphList<Integer> graph = new GraphList<>();
+      graph.addVertex(1);
+      graph.addVertex(2);
+      graph.addVertex(3);
 
+      graph.addEdge(1, 2, 1);
+      graph.addEdge(2, 3, 2);
+
+      ArrayList<Edge<Integer>> edges = new ArrayList<>();
+      edges.add(new Edge<>(1, 2, 1));
+      edges.add(new Edge<>(2, 3, 2));
+
+      ArrayList<Edge<Integer>> minimumSpanningTree = graph.kruskal(edges);
+
+      assertTrue(minimumSpanningTree.isEmpty());
   }
+
 
     @Test
     public void testPrims1() {
@@ -330,9 +379,6 @@ public class GraphListTest {
         int mstWeight = graphList.prim(graphList.getVertices().size(), edges, start);
         Assertions.assertEquals(1, mstWeight);
     }
-
-
-
 
 }
 

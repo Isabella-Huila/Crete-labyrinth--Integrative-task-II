@@ -12,6 +12,9 @@ public class Edge<K> {
         this.cost= cost;
     }
 
+    public Edge(int i, int i1, int cost) {
+    }
+
     public int getCost() {
         return cost;
     }
